@@ -8,8 +8,11 @@ export default function App() {
   // State variable used to store users public wallet.
   const [currentAccount, setCurrentAccount] = useState("");
 
-  const contractAddress = "0xe0F3ab0D999F50c23C32836236CEbCDeD5D49AbA"
-  
+  // State variable used to store all waves
+  const [allWaves, setAllWaves] = useState([]);
+
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+
   const contractABI = abi.abi;
 
   const checkIfWalletIsConnected = async () => {
@@ -34,7 +37,7 @@ export default function App() {
       } else {
         console.log("No authorized account found")
       }
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   }
@@ -90,20 +93,52 @@ export default function App() {
     }
   }
 
+  // Gets all waves from contract
+  const getAllWaves = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+        // Invoke getAllWaves method on contract
+        const waves = await wavePortalContract.getAllWaves();
+
+        // Filter out what we need from waves(address, timestamp, message)
+        let wavesCleaned = [];
+        waves.forEach(wave => {
+          wavesCleaned.push({
+            address: wave.waver,
+            timestamp: new Date(wave.timestamp * 1000),
+            message: wave.message
+          });
+        });
+
+        // Store data in state
+        setAllWaves(wavesCleaned);
+      } else {
+        console.log("Ethereum object is not present in window.")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
-  
+
   return (
     <div className="mainContainer">
 
       <div className="dataContainer">
         <div className="header">
-        👋 Welcome!
+          👋 Welcome!
         </div>
 
         <div className="bio">
-        I'm wiel, I built this so you can wave at me. Cool right? Connect your Ethereum wallet and wave at me!
+          I'm wiel, I built this so you can wave at me. Cool right? Connect your Ethereum wallet and wave at me!
         </div>
 
         <button className="waveButton" onClick={wave}>
