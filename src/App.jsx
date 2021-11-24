@@ -85,7 +85,7 @@ export default function App() {
         console.log("Retrieve total wave count...", count.toNumber());
 
         // Execute 'wave' on smart contract
-        const waveTxn = await wavePortalContract.wave('First wave');
+        const waveTxn = await wavePortalContract.wave('Anotha one');
         console.log("Mining...", waveTxn.hash);
 
         await waveTxn.wait();
@@ -159,7 +159,7 @@ export default function App() {
             Connect Wallet
           </button>
         )}
-
+        <p className="wave-board"> Wave Board </p>
         {
           allWaves.map((wave, index) => {
             return (

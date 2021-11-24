@@ -18,6 +18,12 @@
   font-weight: 600;
 }
 
+.wave-board {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 400;
+}
+
 .bio {
   text-align: center;
   color: gray;
