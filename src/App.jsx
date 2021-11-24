@@ -11,7 +11,7 @@ export default function App() {
   // State variable used to store all waves
   const [allWaves, setAllWaves] = useState([]);
 
-  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+  const contractAddress = "0x37E4C2CBA8A844282D8bdB082415362B56920e99"
 
   const contractABI = abi.abi;
 
@@ -34,6 +34,7 @@ export default function App() {
         const account = accounts[0];
         console.log("Found an authorized account:", account);
         setCurrentAccount(account)
+        // invoke getAllWaves when connected + authorized account
       } else {
         console.log("No authorized account found")
       }
@@ -65,19 +66,25 @@ export default function App() {
   }
 
   const wave = async () => {
+    console.log('Inside wave function')
     try {
       const { ethereum } = window;
+      console.log('ethereum object provided by window:', ethereum)
 
       if (ethereum) {
+        console.log('ethereum object is present in the browser')
         const provider = new ethers.providers.Web3Provider(ethereum);
+        console.log('provider from ethers:', provider)
         const signer = provider.getSigner();
+        console.log('signer from provider:', signer)
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+        console.log('wavePortal Contract:', wavePortalContract)
 
         let count = await wavePortalContract.getTotalWaves();
         console.log("Retrieve total wave count...", count.toNumber());
 
         // Execute 'wave' on smart contract
-        const waveTxn = await wavePortalContract.wave();
+        const waveTxn = await wavePortalContract.wave('First wave');
         console.log("Mining...", waveTxn.hash);
 
         await waveTxn.wait();
