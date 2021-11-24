@@ -35,6 +35,7 @@ export default function App() {
         console.log("Found an authorized account:", account);
         setCurrentAccount(account)
         // invoke getAllWaves when connected + authorized account
+        getAllWaves()
       } else {
         console.log("No authorized account found")
       }
@@ -158,6 +159,19 @@ export default function App() {
             Connect Wallet
           </button>
         )}
+
+        {
+          allWaves.map((wave, index) => {
+            return (
+              <div key={index} style={{ backgroundColor: "OldLace", marginTop: "16px", padding: "8px" }}>
+                <div>Address: {wave.address}</div>
+                <div>Time: {wave.timestamp.toString()}</div>
+                <div>Message: {wave.message}</div>
+              </div>
+            )
+          })
+        }
+
       </div>
     </div>
   );
