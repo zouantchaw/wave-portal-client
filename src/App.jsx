@@ -11,6 +11,8 @@ export default function App() {
   // State variable used to store all waves
   const [allWaves, setAllWaves] = useState([]);
 
+  const [waveInput, setWaveInput] = useState("")
+
   const contractAddress = "0x37E4C2CBA8A844282D8bdB082415362B56920e99"
 
   const contractABI = abi.abi;
@@ -85,11 +87,14 @@ export default function App() {
         console.log("Retrieve total wave count...", count.toNumber());
 
         // Execute 'wave' on smart contract
-        const waveTxn = await wavePortalContract.wave('Anotha one');
+        const waveTxn = await wavePortalContract.wave(waveInput);
         console.log("Mining...", waveTxn.hash);
 
         await waveTxn.wait();
         console.log("Mined -- ", waveTxn.hash);
+
+        // Clear input field
+        setWaveInput("")
 
         count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber());
@@ -133,6 +138,10 @@ export default function App() {
     }
   }
 
+  const updateWaveInput = (event) => {
+    setWaveInput(event.target.value)
+  }
+
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
@@ -149,6 +158,8 @@ export default function App() {
           I'm wiel, I built this so you can wave at me. Cool right? Connect your Ethereum wallet and wave at me!
         </div>
 
+        <input placeholder="gm... type your message" value={waveInput} className="waveInput" onChange={updateWaveInput} />
+        {console.log('waveInput:', waveInput)}
         <button className="waveButton" onClick={wave}>
           Wave at Me
         </button>
@@ -159,7 +170,7 @@ export default function App() {
             Connect Wallet
           </button>
         )}
-        <p className="wave-board"> Wave Board </p>
+        <p className="waveBoard"> Wave Board </p>
         {
           allWaves.map((wave, index) => {
             return (

@@ -18,7 +18,7 @@
   font-weight: 600;
 }
 
-.wave-board {
+.waveBoard {
   text-align: center;
   font-size: 22px;
   font-weight: 400;
@@ -36,5 +36,8 @@
   padding: 8px;
   border: 0;
   border-radius: 5px;
-  
+}
+
+.waveInput {
+  margin-top: 16px;
 }
