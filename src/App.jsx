@@ -13,7 +13,7 @@ export default function App() {
 
   const [waveInput, setWaveInput] = useState("")
 
-  const contractAddress = "0x37E4C2CBA8A844282D8bdB082415362B56920e99"
+  const contractAddress = "0xc86655B9c012A3198C95C63F4a5A4bD82fA20299"
 
   const contractABI = abi.abi;
 
@@ -87,7 +87,9 @@ export default function App() {
         console.log("Retrieve total wave count...", count.toNumber());
 
         // Execute 'wave' on smart contract
-        const waveTxn = await wavePortalContract.wave(waveInput);
+        // Make the user pay a set amount of gas of 300,000. 
+        // And, if they don't use all of it in the transaction they'll automatically be refunded.
+        const waveTxn = await wavePortalContract.wave(waveInput, {gasLimit: 300000});
         console.log("Mining...", waveTxn.hash);
 
         await waveTxn.wait();
